@@ -23,6 +23,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+      - name: Apply modifications
+        run: |
+          cd patches
+          bash ../patches/apply-modifications.sh ../patches
+    
       - name: Lint code
         run: bash ./gradlew lint --stacktrace
       - name: Unit tests
