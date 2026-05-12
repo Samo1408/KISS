@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-PATCHES_DIR="${1:-patches}"
+PATCHES_DIR="patches"
 JAVA_SRC="app/src/main/java/fr/neamar/kiss"
 RES_SRC="app/src/main/res"
 
