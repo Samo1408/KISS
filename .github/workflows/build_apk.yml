@@ -27,6 +27,7 @@ jobs:
         run: |
           ls
           cd patches
+          ls
           bash apply-modifications.sh patches
     
       - name: Lint code
