@@ -1,0 +1,55 @@
+name: App testing
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.sha }}
+  cancel-in-progress: ${{ !contains(github.ref, 'master') }}
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Lint code
+        run: bash ./gradlew lint --stacktrace
+      - name: Unit tests
+        run: bash ./gradlew testDebugUnitTest --stacktrace
+  apk:
+    name: Generate APK
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - name: Build debug APK
+        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Build release APK
+        run: bash ./gradlew assembleRelease --stacktrace
+      - name: Upload debug APK
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload release APK
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: release
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
