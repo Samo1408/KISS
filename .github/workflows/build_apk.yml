@@ -28,7 +28,7 @@ jobs:
           ls
           cd patches
           ls
-          bash apply-modifications.sh
+          bash apply-modifications.sh $(pwd)
     
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
