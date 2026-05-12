@@ -1,4 +1,4 @@
-name: App testing
+name: App Building
 
 on:
   push:
@@ -25,6 +25,7 @@ jobs:
           java-version: 21
       - name: Apply modifications
         run: |
+          ls
           cd ../patches
           bash apply-modifications.sh ../patches
     
