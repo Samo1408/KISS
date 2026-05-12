@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Additional array resources needed for the modified KISS.
+    The apply-modifications.sh script appends these to the existing arrays.xml.
+-->
+<resources>
+
+    <!-- App Drawer scroll direction preference -->
+    <string-array name="app_drawer_scroll_entries">
+        <item>@string/setting_app_drawer_scroll_vertical</item>
+        <item>@string/setting_app_drawer_scroll_horizontal</item>
+    </string-array>
+
+    <string-array name="app_drawer_scroll_values">
+        <item>vertical</item>
+        <item>horizontal</item>
+    </string-array>
+
+</resources>

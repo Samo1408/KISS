@@ -1,0 +1,45 @@
+
+    <!-- App Drawer -->
+    <string name="app_drawer_title">App Drawer</string>
+    <string name="tab_personal">Personal</string>
+    <string name="tab_work">Work</string>
+    <string name="close_app_drawer">Close</string>
+    <string name="sort_apps">Sort apps</string>
+    <string name="add_folder">Add folder</string>
+    <string name="sort_by_name">Sort A–Z</string>
+    <string name="sort_by_install_time">Sort by install time</string>
+    <string name="create_folder_title">New Folder</string>
+    <string name="create_folder_hint">Folder name</string>
+    <string name="create_folder_ok">Create</string>
+
+    <!-- Long-press menu additions -->
+    <string name="menu_advanced_permissions">Advanced Permissions</string>
+    <string name="menu_share_apk">Share App (APK)</string>
+    <string name="menu_install_other_user">Install to Another User</string>
+    <string name="menu_show_data_dir">Show Data Dir</string>
+    <string name="menu_show_app_dir">Show App Dir</string>
+    <string name="menu_select_app">Select</string>
+    <string name="menu_double_tap_sleep">Double Tap to Sleep</string>
+
+    <!-- Advanced permissions sub-items -->
+    <string name="perm_usage_stats">Usage Stats Access</string>
+    <string name="perm_all_files">All Files Access</string>
+    <string name="perm_unknown_sources">Unknown Sources</string>
+
+    <!-- Folder & selection strings -->
+    <plurals name="folder_app_count">
+        <item quantity="one">%d app</item>
+        <item quantity="other">%d apps</item>
+    </plurals>
+
+    <!-- Error messages -->
+    <string name="error_open_settings">Could not open settings</string>
+    <string name="error_share_apk">Could not share APK</string>
+    <string name="error_no_other_users">No other users found</string>
+    <string name="install_user_success">Installed to %s</string>
+    <string name="install_user_error">Failed to install to %s</string>
+
+    <!-- Settings: App Drawer scroll direction -->
+    <string name="setting_app_drawer_scroll_title">App Drawer scroll direction</string>
+    <string name="setting_app_drawer_scroll_vertical">Vertical (grid)</string>
+    <string name="setting_app_drawer_scroll_horizontal">Horizontal (list)</string>
