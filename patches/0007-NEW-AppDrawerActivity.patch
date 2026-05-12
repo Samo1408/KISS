@@ -1,16 +1,14 @@
 --- /dev/null
 +++ b/app/src/main/java/fr/neamar/kiss/ui/AppDrawerActivity.java
-@@ -0,0 +1,406 @@
+@@ -0,0 +1,391 @@
 +package fr.neamar.kiss.ui;
 +
 +import android.app.AlertDialog;
 +import android.content.Context;
-+import android.content.Intent;
 +import android.content.SharedPreferences;
-+import android.content.pm.ApplicationInfo;
-+import android.content.pm.LauncherActivityInfo;
 +import android.content.pm.LauncherApps;
 +import android.content.pm.PackageManager;
++import android.graphics.Color;
 +import android.graphics.drawable.Drawable;
 +import android.os.Bundle;
 +import android.os.UserManager;
@@ -22,6 +20,7 @@
 +import android.view.View;
 +import android.view.ViewGroup;
 +import android.widget.BaseAdapter;
++import android.widget.Button;
 +import android.widget.EditText;
 +import android.widget.GridView;
 +import android.widget.HorizontalScrollView;
@@ -36,8 +35,6 @@
 +import androidx.core.content.ContextCompat;
 +import androidx.preference.PreferenceManager;
 +
-+import com.google.android.material.tabs.TabLayout;
-+
 +import java.util.ArrayList;
 +import java.util.Collections;
 +import java.util.LinkedHashMap;
@@ -50,27 +47,27 @@
 +
 +/**
 + * Full-screen App Drawer with:
-+ *  - Two tabs: Personal / Work
-+ *  - Work tab groups secondary-user apps by user (e.g. "user 10")
-+ *  - Sort by name A–Z or by install date
++ *  - Two tabs: Personal / Work  (plain Button-based tabs, no Material dependency)
++ *  - Work tab groups secondary-user apps by user serial
++ *  - Sort by name A-Z or by install date
 + *  - Horizontal / vertical scroll (from Settings)
-+ *  - "New folder" action (creates a named folder grouping selected apps)
++ *  - "New folder" action (dialog to name a folder)
 + */
 +public class AppDrawerActivity extends AppCompatActivity {
 +
-+    private static final String SORT_PREF = "app_drawer_sort";
-+    private static final String SORT_NAME = "name";
-+    private static final String SORT_INSTALL = "install";
++    private static final String SORT_PREF      = "app_drawer_sort";
++    private static final String SORT_NAME      = "name";
++    private static final String SORT_INSTALL   = "install";
 +
-+    private TabLayout tabLayout;
++    private Button tabPersonal;
++    private Button tabWork;
 +    private ViewGroup contentContainer;
 +    private SharedPreferences prefs;
 +    private String currentSort = SORT_NAME;
++    private int currentTab = 0;
 +
-+    // All apps split by profile
-+    private List<AppPojo> personalApps = new ArrayList<>();
-+    // Map: "user <id>" -> list of apps
-+    private Map<String, List<AppPojo>> workUserApps = new LinkedHashMap<>();
++    private final List<AppPojo> personalApps = new ArrayList<>();
++    private final Map<String, List<AppPojo>> workUserApps = new LinkedHashMap<>();
 +
 +    @Override
 +    protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +77,20 @@
 +        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 +        currentSort = prefs.getString(SORT_PREF, SORT_NAME);
 +
-+        tabLayout = findViewById(R.id.app_drawer_tabs);
++        tabPersonal      = findViewById(R.id.app_drawer_tab_personal);
++        tabWork          = findViewById(R.id.app_drawer_tab_work);
 +        contentContainer = findViewById(R.id.app_drawer_content);
 +
 +        loadApps();
-+        setupTabs();
++
++        if (workUserApps.isEmpty()) {
++            tabWork.setVisibility(View.GONE);
++        }
++
++        tabPersonal.setOnClickListener(v -> selectTab(0));
++        tabWork.setOnClickListener(v -> selectTab(1));
++
++        selectTab(0);
 +    }
 +
 +    // =========================================================================
@@ -93,9 +99,9 @@
 +
 +    @Override
 +    public boolean onCreateOptionsMenu(Menu menu) {
-+        menu.add(0, R.id.app_drawer_menu_sort_name, 0, R.string.app_drawer_sort_name);
++        menu.add(0, R.id.app_drawer_menu_sort_name,    0, R.string.app_drawer_sort_name);
 +        menu.add(0, R.id.app_drawer_menu_sort_install, 1, R.string.app_drawer_sort_install);
-+        menu.add(0, R.id.app_drawer_menu_new_folder, 2, R.string.app_drawer_new_folder);
++        menu.add(0, R.id.app_drawer_menu_new_folder,   2, R.string.app_drawer_new_folder);
 +        return true;
 +    }
 +
@@ -128,8 +134,7 @@
 +        workUserApps.clear();
 +
 +        UserManager userManager = ContextCompat.getSystemService(this, UserManager.class);
-+        LauncherApps launcherApps = ContextCompat.getSystemService(this, LauncherApps.class);
-+        if (userManager == null || launcherApps == null) return;
++        if (userManager == null) return;
 +
 +        List<AppPojo> allPojos = KissApplication.getApplication(this)
 +                .getDataHandler().getAppProvider().getAllAppsWithoutExcluded();
@@ -138,17 +143,16 @@
 +            if (pojo.userHandle.isCurrentUser()) {
 +                personalApps.add(pojo);
 +            } else {
-+                long serial = pojo.userHandle.getRealHandle().hashCode(); // use serial for key
-+                // Retrieve a human-readable user label via UserManager serial
 +                android.os.UserHandle realHandle = pojo.userHandle.getRealHandle();
-+                long serialNumber = userManager.getSerialNumberForUser(realHandle);
-+                String userKey = "user " + serialNumber;
++                long serial = userManager.getSerialNumberForUser(realHandle);
++                String userKey = "user " + serial;
 +                if (!workUserApps.containsKey(userKey)) {
 +                    workUserApps.put(userKey, new ArrayList<>());
 +                }
 +                workUserApps.get(userKey).add(pojo);
 +            }
 +        }
++
 +        sortList(personalApps);
 +        for (List<AppPojo> list : workUserApps.values()) {
 +            sortList(list);
@@ -159,7 +163,6 @@
 +        if (SORT_NAME.equals(currentSort)) {
 +            Collections.sort(list, (a, b) -> a.getName().compareToIgnoreCase(b.getName()));
 +        } else {
-+            // Sort by install time (descending — newest first)
 +            Collections.sort(list, (a, b) -> {
 +                try {
 +                    long tA = getPackageManager().getPackageInfo(a.packageName, 0).firstInstallTime;
@@ -173,26 +176,22 @@
 +    }
 +
 +    // =========================================================================
-+    // Tab setup
++    // Tab switching
 +    // =========================================================================
 +
-+    private void setupTabs() {
-+        tabLayout.removeAllTabs();
-+        tabLayout.addTab(tabLayout.newTab().setText(R.string.app_drawer_tab_personal));
-+        if (!workUserApps.isEmpty()) {
-+            tabLayout.addTab(tabLayout.newTab().setText(R.string.app_drawer_tab_work));
-+        }
++    private void selectTab(int index) {
++        currentTab = index;
++        setTabSelected(tabPersonal, index == 0);
++        setTabSelected(tabWork,     index == 1);
++        showTab(index);
++    }
 +
-+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-+            @Override
-+            public void onTabSelected(TabLayout.Tab tab) {
-+                showTab(tab.getPosition());
-+            }
-+            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-+            @Override public void onTabReselected(TabLayout.Tab tab) {}
-+        });
-+
-+        showTab(0);
++    private void setTabSelected(Button btn, boolean selected) {
++        btn.setAlpha(selected ? 1.0f : 0.5f);
++        btn.setBackgroundColor(selected
++                ? 0xFF1976D2   // blue-ish highlight
++                : Color.TRANSPARENT);
++        btn.setTextColor(selected ? Color.WHITE : Color.GRAY);
 +    }
 +
 +    private void showTab(int position) {
@@ -201,16 +200,14 @@
 +                prefs.getString("app-drawer-scroll-direction", "vertical"));
 +
 +        if (position == 0) {
-+            // Personal tab — flat grid/list
 +            contentContainer.addView(buildAppGrid(personalApps, horizontal));
 +        } else {
-+            // Work tab — one section per secondary user
 +            if (horizontal) {
 +                HorizontalScrollView hScroll = new HorizontalScrollView(this);
 +                LinearLayout row = new LinearLayout(this);
 +                row.setOrientation(LinearLayout.HORIZONTAL);
 +                for (Map.Entry<String, List<AppPojo>> entry : workUserApps.entrySet()) {
-+                    row.addView(buildUserSection(entry.getKey(), entry.getValue(), false));
++                    row.addView(buildUserSection(entry.getKey(), entry.getValue()));
 +                }
 +                hScroll.addView(row);
 +                contentContainer.addView(hScroll);
@@ -219,7 +216,7 @@
 +                LinearLayout col = new LinearLayout(this);
 +                col.setOrientation(LinearLayout.VERTICAL);
 +                for (Map.Entry<String, List<AppPojo>> entry : workUserApps.entrySet()) {
-+                    col.addView(buildUserSection(entry.getKey(), entry.getValue(), false));
++                    col.addView(buildUserSection(entry.getKey(), entry.getValue()));
 +                }
 +                vScroll.addView(col);
 +                contentContainer.addView(vScroll);
@@ -230,17 +227,13 @@
 +    private void refreshCurrentTab() {
 +        sortList(personalApps);
 +        for (List<AppPojo> list : workUserApps.values()) sortList(list);
-+        int selected = tabLayout.getSelectedTabPosition();
-+        showTab(selected < 0 ? 0 : selected);
++        showTab(currentTab);
 +    }
 +
 +    // =========================================================================
 +    // View builders
 +    // =========================================================================
 +
-+    /**
-+     * Builds a scrollable grid of app icons.
-+     */
 +    private View buildAppGrid(List<AppPojo> apps, boolean horizontal) {
 +        if (horizontal) {
 +            HorizontalScrollView scroll = new HorizontalScrollView(this);
@@ -254,15 +247,15 @@
 +        } else {
 +            GridView grid = new GridView(this);
 +            grid.setNumColumns(4);
++            grid.setLayoutParams(new LinearLayout.LayoutParams(
++                    LinearLayout.LayoutParams.MATCH_PARENT,
++                    LinearLayout.LayoutParams.MATCH_PARENT));
 +            grid.setAdapter(new AppGridAdapter(this, apps));
 +            return grid;
 +        }
 +    }
 +
-+    /**
-+     * Builds a labelled section for a single secondary user with their apps.
-+     */
-+    private View buildUserSection(String userLabel, List<AppPojo> apps, boolean horizontal) {
++    private View buildUserSection(String userLabel, List<AppPojo> apps) {
 +        LinearLayout section = new LinearLayout(this);
 +        section.setOrientation(LinearLayout.VERTICAL);
 +
@@ -272,13 +265,10 @@
 +        header.setPadding(16, 24, 16, 8);
 +        section.addView(header);
 +
-+        section.addView(buildAppGrid(apps, horizontal));
++        section.addView(buildAppGrid(apps, false));
 +        return section;
 +    }
 +
-+    /**
-+     * Builds a single app icon cell (icon + label).
-+     */
 +    private View buildAppCell(AppPojo app) {
 +        LinearLayout cell = new LinearLayout(this);
 +        cell.setOrientation(LinearLayout.VERTICAL);
@@ -301,19 +291,17 @@
 +        label.setMaxLines(2);
 +        label.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
 +        int labelWidth = (int) (60 * getResources().getDisplayMetrics().density);
-+        label.setLayoutParams(new LinearLayout.LayoutParams(labelWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
++        label.setLayoutParams(new LinearLayout.LayoutParams(
++                labelWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 +
 +        cell.addView(icon);
 +        cell.addView(label);
 +
 +        cell.setOnClickListener(v -> launchApp(app));
 +        cell.setOnLongClickListener(v -> {
-+            // Let the standard KISS long-press popup handle it
-+            // by delegating to the existing AppResult mechanism
 +            Toast.makeText(this, app.getName(), Toast.LENGTH_SHORT).show();
 +            return true;
 +        });
-+
 +        return cell;
 +    }
 +
@@ -336,7 +324,6 @@
 +    private void showNewFolderDialog() {
 +        EditText input = new EditText(this);
 +        input.setHint(R.string.app_drawer_folder_name_hint);
-+
 +        new AlertDialog.Builder(this)
 +                .setTitle(R.string.app_drawer_new_folder)
 +                .setView(input)
@@ -346,7 +333,6 @@
 +                        Toast.makeText(this,
 +                                "Folder \"" + name + "\" created",
 +                                Toast.LENGTH_SHORT).show();
-+                        // TODO: persist folder and associate selected apps
 +                    }
 +                })
 +                .setNegativeButton(android.R.string.cancel, null)
@@ -361,14 +347,14 @@
 +        private final Context context;
 +        private final List<AppPojo> apps;
 +
-+        AppGridAdapter(Context context, List<AppPojo> apps) {
-+            this.context = context;
-+            this.apps = apps;
++        AppGridAdapter(Context ctx, List<AppPojo> apps) {
++            this.context = ctx;
++            this.apps    = apps;
 +        }
 +
-+        @Override public int getCount() { return apps.size(); }
-+        @Override public Object getItem(int pos) { return apps.get(pos); }
-+        @Override public long getItemId(int pos) { return pos; }
++        @Override public int    getCount()              { return apps.size(); }
++        @Override public Object getItem(int pos)        { return apps.get(pos); }
++        @Override public long   getItemId(int pos)      { return pos; }
 +
 +        @Override
 +        public View getView(int position, View convertView, ViewGroup parent) {
@@ -376,7 +362,7 @@
 +                convertView = LayoutInflater.from(context)
 +                        .inflate(R.layout.item_app_drawer_cell, parent, false);
 +            }
-+            AppPojo app = apps.get(position);
++            AppPojo app    = apps.get(position);
 +            ImageView icon = convertView.findViewById(R.id.drawer_cell_icon);
 +            TextView label = convertView.findViewById(R.id.drawer_cell_label);
 +
@@ -402,7 +388,6 @@
 +                            Toast.LENGTH_SHORT).show();
 +                }
 +            });
-+
 +            return convertView;
 +        }
 +    }

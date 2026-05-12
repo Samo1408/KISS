@@ -1,27 +1,50 @@
 --- /dev/null
 +++ b/app/src/main/res/layout/activity_app_drawer.xml
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,51 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<!--
 +    Layout for AppDrawerActivity (mod).
-+    Root: vertical LinearLayout
-+      - TabLayout   (Personal / Work)
-+      - FrameLayout (content swapped on tab change)
++    Uses plain Button-based tabs — no Material Components dependency.
 +-->
 +<LinearLayout
 +    xmlns:android="http://schemas.android.com/apk/res/android"
-+    xmlns:app="http://schemas.android.com/apk/res-auto"
 +    android:layout_width="match_parent"
 +    android:layout_height="match_parent"
 +    android:orientation="vertical">
 +
-+    <com.google.android.material.tabs.TabLayout
-+        android:id="@+id/app_drawer_tabs"
++    <!-- Tab row: Personal | Work -->
++    <LinearLayout
 +        android:layout_width="match_parent"
-+        android:layout_height="wrap_content"
-+        app:tabMode="fixed"
-+        app:tabGravity="fill" />
++        android:layout_height="48dp"
++        android:orientation="horizontal">
 +
++        <Button
++            android:id="@+id/app_drawer_tab_personal"
++            android:layout_width="0dp"
++            android:layout_height="match_parent"
++            android:layout_weight="1"
++            android:text="@string/app_drawer_tab_personal"
++            android:textAllCaps="false"
++            android:background="@android:color/transparent" />
++
++        <Button
++            android:id="@+id/app_drawer_tab_work"
++            android:layout_width="0dp"
++            android:layout_height="match_parent"
++            android:layout_weight="1"
++            android:text="@string/app_drawer_tab_work"
++            android:textAllCaps="false"
++            android:background="@android:color/transparent" />
++
++    </LinearLayout>
++
++    <!-- Thin divider -->
++    <View
++        android:layout_width="match_parent"
++        android:layout_height="1dp"
++        android:background="#33000000" />
++
++    <!-- Content area swapped on tab change -->
 +    <FrameLayout
 +        android:id="@+id/app_drawer_content"
 +        android:layout_width="match_parent"
