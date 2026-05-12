@@ -1,0 +1,70 @@
+name: Build KISS Modified APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repository (patches)
+        uses: actions/checkout@v4
+        with:
+          path: kiss-patches
+
+      - name: Clone KISS Launcher source
+        run: |
+          git clone https://github.com/Neamar/KISS.git kiss-src
+          cd kiss-src
+          echo "KISS HEAD: $(git rev-parse --short HEAD)"
+
+      - name: Apply modifications
+        run: |
+          cd kiss-src
+          bash ../kiss-patches/patches/apply-modifications.sh ../kiss-patches/patches
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x kiss-src/gradlew
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('kiss-src/**/*.gradle*', 'kiss-src/**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build debug APK
+        working-directory: kiss-src
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KISS-Modified-Debug-APK
+          path: kiss-src/app/build/outputs/apk/debug/*.apk
+          retention-days: 30
+
+      - name: Upload APK to release (on tag push)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: kiss-src/app/build/outputs/apk/debug/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
