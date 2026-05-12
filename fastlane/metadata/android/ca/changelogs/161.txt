@@ -1,2 +1,0 @@
-* Corregida la fallada en obrir els paràmatres
-* Traduccions actualitzades

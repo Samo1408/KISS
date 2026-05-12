@@ -1,3 +1,0 @@
-* Sık kullanılanlara sürükle ve bırak için daha fazla iyileştirme
-* Yalnızca KISS öntanımlı başlatıcı olduğunda kısayolları ayarla
-* Kullanılmayan günlük kaydı kaldırıldı

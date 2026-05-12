@@ -1,1 +1,0 @@
-* Soporte de Android 4 finalizado

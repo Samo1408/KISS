@@ -1,3 +1,0 @@
-* Fler förbättringar kring flytta favoriter
-* skapa enbart genvägar när KISS är standardappen för hemskärm
-* Tagit bort oanvända loggningar

@@ -1,3 +1,0 @@
-* Atualize para o Android 14
-
-* Os aplicativos congelados agora aparecerão em cinza

@@ -1,2 +1,0 @@
-* Arreglado el fallo al abrir la configuración
-* Actualización de las traducciones

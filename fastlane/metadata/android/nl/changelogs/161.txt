@@ -1,2 +1,0 @@
-* Crash verhelpen bij het openen van instellingen
-* Bijgewerkte vertalingen

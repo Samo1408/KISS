@@ -1,3 +1,0 @@
-* Correzioni per le icone personalizzate
-* Collegamento alle preferenze di KISS dal sistema Android
-* Modifiche alla traduzione

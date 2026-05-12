@@ -1,3 +1,0 @@
-* Dukungan untuk pintasan aplikasi :) (@alenjularic)
-* Tambahkan tag ke favorit (@TBog)
-* Penyempurnaan penyedia pencarian (@amkcpu)

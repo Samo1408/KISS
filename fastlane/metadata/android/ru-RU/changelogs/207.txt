@@ -1,2 +1,0 @@
-* Иконки Material You в тэгах (@marunjar)
-* Улучшения для пакетов иконок (Icon packs) (@marunjar)

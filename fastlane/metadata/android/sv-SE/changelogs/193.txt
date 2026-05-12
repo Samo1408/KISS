@@ -1,3 +1,0 @@
-* Korrigeringar i anpassade ikoner
-* Länk till KISS-preferenser från Android System
-* Översättningsändringar

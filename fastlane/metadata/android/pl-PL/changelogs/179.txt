@@ -1,7 +1,0 @@
-Lista zmian:
-* Funkcja: Mniejszy rozmiar tekstu i ikon
-* Funkcja: Ulepszenie prześwitujących motywów :)
-* Funkcja: Dostosowywanie motywu - Usuwanie cieni, wyświetlanie separatora listy itp.
-* Poprawka: Naprawiony widżet WhatsApp 
-
-Zaktualizowany opis Sklepu Play. Wyślij opinie: https://github.com/Neamar/KISS/issues/1486

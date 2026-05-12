@@ -1,5 +1,0 @@
-* Migliorata selezione widget (@TBog)
-* Risolto (si spera) problema con dispositivi e widget Xiaomi.
-* I pacchetti di icone ora utilizzano le forme (@marunjar)
-* Più opzioni per dimensioni dei risultati
-* Correzioni scorciatoie

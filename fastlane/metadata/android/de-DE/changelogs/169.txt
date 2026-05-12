@@ -1,3 +1,0 @@
-* Weitere Verbesserung des Drag and Drop der Favoriten
-* Verknüpfungen nur erstellen, wenn KISS der Standard-Launcher ist
-* Ungenutzte Protokollierung entfernt

@@ -1,3 +1,0 @@
-* More improvements to favourites drag and drop
-* Only set up shortcuts when KISS is the default launcher
-* Removed unused logging

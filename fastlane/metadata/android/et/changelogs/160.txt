@@ -1,3 +1,0 @@
-* Rakenduste kiirklahvide tugi :) (@alenjularic)
-* Sildista lemmikuid (@TBog)
-* Otsinguteenuste parandused (@amkcpu)

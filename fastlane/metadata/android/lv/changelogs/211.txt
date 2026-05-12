@@ -1,2 +1,0 @@
-* Uzlabojums uz Android 14
-* Iesaldētās lietotnes tagad būs pelēkas

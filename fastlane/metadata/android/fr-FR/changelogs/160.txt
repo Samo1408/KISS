@@ -1,3 +1,0 @@
-* Prise en charge des raccourcis d'applications :) (@alenjularic)
-* Ajout d'une étiquette favoris (@TBog)
-* Améliorations des fournisseurs de recherche (@amkcpu)

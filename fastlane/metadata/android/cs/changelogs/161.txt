@@ -1,2 +1,0 @@
-* Opraven pád aplikace při otevření nastavení
-* Aktualizovány překlady

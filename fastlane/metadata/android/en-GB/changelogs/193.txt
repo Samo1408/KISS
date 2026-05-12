@@ -1,3 +1,0 @@
-* Custom icons fixes
-* Link to KISS preferences from Android System
-* Translation changes

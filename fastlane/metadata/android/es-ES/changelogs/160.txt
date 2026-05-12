@@ -1,3 +1,0 @@
-* Compatibilidad con los atajos de aplicaciones :) (@alenjularic)
-* Añadir una etiqueta a los favoritos (@TBog)
-* Mejoras en los proveedores de búsqueda (@amkcpu)

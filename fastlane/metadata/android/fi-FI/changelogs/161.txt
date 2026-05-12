@@ -1,2 +1,0 @@
-* Korjaa kaatuminen asetusten avaamisessa
-* Päivitetty käännöksiä

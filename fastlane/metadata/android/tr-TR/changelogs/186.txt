@@ -1,4 +1,0 @@
-* Ayarlar ve etiketler için içe ve dışa aktarıcı eklendi
-* Lollipop öncesi aygıtlar için iyileştirmeler ve yuvarlak köşeler desteği (@not-chicken)
-
-v3.16, Android KitKat desteğine sahip son sürüm olacak.

@@ -1,3 +1,0 @@
-* Suport per a les dreceres de l'aplicació :) (@alenjularic)
-* Afegeix una etiqueta als preferits (@TBog)
-* Millores als motors de cerca (@amkcpu)

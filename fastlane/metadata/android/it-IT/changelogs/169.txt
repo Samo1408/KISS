@@ -1,3 +1,0 @@
-* Altri miglioramenti per il trascinamento dei preferiti
-* Impostare le scorciatoie solo quando KISS è il launcher predefinito
-* Rimosso logging non utilizzato

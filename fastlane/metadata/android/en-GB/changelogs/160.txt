@@ -1,3 +1,0 @@
-* Support for app shortcuts :) (@alenjularic)
-* Add a tag to favourites (@TBog)
-* Search providers improvements (@amkcpu)

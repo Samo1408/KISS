@@ -1,2 +1,0 @@
-* Actualizar a Android 14
-* Las aplicaciones congeladas ahora aparecerán en gris

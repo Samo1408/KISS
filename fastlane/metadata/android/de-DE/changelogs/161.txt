@@ -1,2 +1,0 @@
-* Absturzfehler beim Öffnen der Einstellungen behoben
-* Übersetzungen aktualisiert

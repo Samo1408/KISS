@@ -1,7 +1,0 @@
-* Parannettu vimpain-valitsin (@TBog)
-* (toivottavasti) korjaa Xiaomi-laitteiden ja vimpainten ongelman
-* Kuvakepaketit käyttävät nyt muotoja (@marunjar)
-* Lisää vaihtoehtoja tuloskokoille
-* Pikanäppäinten korjauksia
-* Työsovelluskuvakkeiden korjaukset
-* Lisätty vastuuvapauslauseke Androidin esteettömyyssovellusliittymän käytöstä Play Kaupan sääntöjen noudattamiseksi

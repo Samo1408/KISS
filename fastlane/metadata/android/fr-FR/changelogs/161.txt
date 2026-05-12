@@ -1,2 +1,0 @@
-* Correction du plantage lors de l'ouverture des paramètres
-* Mise à jour des traductions

@@ -1,3 +1,0 @@
-* Støtte for programsnarveier :) (@alenjularic)
-* Legg til etikett for favoritter (@TBog)
-* Søketilbyderforbedringer (@amkcpu)

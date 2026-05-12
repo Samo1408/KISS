@@ -1,3 +1,0 @@
-* Correccions en la personalització d'icones
-* Enllaç a les preferències de KISS des del sistema d'Android
-* Canvis en la traducció

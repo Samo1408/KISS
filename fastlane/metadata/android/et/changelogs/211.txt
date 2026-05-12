@@ -1,2 +1,0 @@
-* Uuendused Android 14 jaoks
-* Külmutatud rakendused kuvatakse nüüd hallina
