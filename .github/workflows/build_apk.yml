@@ -26,8 +26,8 @@ jobs:
       - name: Apply modifications
         run: |
           ls
-          cd ../patches
-          bash apply-modifications.sh ../patches
+          cd patches
+          bash apply-modifications.sh patches
     
       - name: Lint code
         run: bash ./gradlew lint --stacktrace
