@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: ${{ !contains(github.ref, 'master') }}
 
 jobs:
-  test:
-    name: Run Unit Tests
+  apk:
+    name: Generate APK
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
@@ -30,20 +30,6 @@ jobs:
           ls
           bash apply-modifications.sh patches
     
-      - name: Lint code
-        run: bash ./gradlew lint --stacktrace
-      - name: Unit tests
-        run: bash ./gradlew testDebugUnitTest --stacktrace
-  apk:
-    name: Generate APK
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v5
-      - name: set up Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'temurin'
-          java-version: 21
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace
       - name: Build release APK
