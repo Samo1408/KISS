@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Additional preferences to merge into the existing preferences.xml.
+    The apply-modifications.sh script appends these inside the root <PreferenceScreen>.
+-->
+
+    <!-- App Drawer Settings Group -->
+    <PreferenceCategory android:title="@string/app_drawer_title">
+
+        <ListPreference
+            android:key="app_drawer_scroll"
+            android:title="@string/setting_app_drawer_scroll_title"
+            android:entries="@array/app_drawer_scroll_entries"
+            android:entryValues="@array/app_drawer_scroll_values"
+            android:defaultValue="vertical"
+            android:summary="%s" />
+
+    </PreferenceCategory>
