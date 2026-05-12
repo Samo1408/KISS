@@ -1,0 +1,16 @@
+--- a/app/src/main/res/values/arrays.xml
++++ b/app/src/main/res/values/arrays.xml
+@@ -246,4 +246,13 @@
+     <string-array name="resultHighlightingDefault">
+         <item>color</item>
+     </string-array>
++    <!-- App Drawer scroll direction (mod) -->
++    <string-array name="appDrawerScrollEntries">
++        <item>@string/pref_app_drawer_scroll_vertical</item>
++        <item>@string/pref_app_drawer_scroll_horizontal</item>
++    </string-array>
++    <string-array name="appDrawerScrollValues" translatable="false">
++        <item>vertical</item>
++        <item>horizontal</item>
++    </string-array>
+ </resources>

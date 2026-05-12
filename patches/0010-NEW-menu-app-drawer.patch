@@ -1,0 +1,27 @@
+--- /dev/null
++++ b/app/src/main/res/menu/menu_app_drawer.xml
+@@ -0,0 +1,24 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++    Options menu for AppDrawerActivity (mod).
++    Provides Sort and New Folder actions.
++-->
++<menu xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
++
++    <item
++        android:id="@+id/app_drawer_menu_sort_name"
++        android:title="@string/app_drawer_sort_name"
++        app:showAsAction="never" />
++
++    <item
++        android:id="@+id/app_drawer_menu_sort_install"
++        android:title="@string/app_drawer_sort_install"
++        app:showAsAction="never" />
++
++    <item
++        android:id="@+id/app_drawer_menu_new_folder"
++        android:title="@string/app_drawer_new_folder"
++        app:showAsAction="never" />
++
++</menu>

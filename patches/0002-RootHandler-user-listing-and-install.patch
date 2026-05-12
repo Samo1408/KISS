@@ -1,0 +1,144 @@
+--- a/app/src/main/java/fr/neamar/kiss/RootHandler.java
++++ b/app/src/main/java/fr/neamar/kiss/RootHandler.java
+@@ -5,7 +5,11 @@
+ 
+ import androidx.preference.PreferenceManager;
+ 
++import java.io.BufferedReader;
++import java.io.InputStreamReader;
+ import java.nio.charset.StandardCharsets;
++import java.util.ArrayList;
++import java.util.List;
+ 
+ import fr.neamar.kiss.utils.Log;
+ 
+@@ -30,7 +34,6 @@
+     }
+ 
+     public boolean isRootAvailable() {
+-
+         if (isRootAvailable == null) {
+             try {
+                 isRootAvailable = executeRootShell(null);
+@@ -38,10 +41,13 @@
+                 isRootAvailable = false;
+             }
+         }
+-
+         return isRootAvailable;
+     }
+ 
++    // =========================================================================
++    // Existing features
++    // =========================================================================
++
+     public boolean hibernateApp(String packageName) {
+         try {
+             return executeRootShell("am force-stop " + packageName);
+@@ -50,15 +56,66 @@
+         }
+     }
+ 
++    // =========================================================================
++    // New root features
++    // =========================================================================
++
++    /**
++     * Returns a list of secondary users obtained via "pm list users".
++     * Each entry is formatted as "user &lt;id&gt;: &lt;name&gt;" so the caller can
++     * display it directly and still parse the id easily.
++     * Returns an empty list (never null) when root is not available or the
++     * command fails.
++     */
++    public List<String> listUsers() {
++        List<String> result = new ArrayList<>();
++        try {
++            List<String> lines = executeRootShellWithOutput("pm list users");
++            for (String line : lines) {
++                // Format: "	UserInfo{10:Work profile:30} running"
++                line = line.trim();
++                if (!line.startsWith("UserInfo{")) continue;
++                // Extract content between braces
++                String inner = line.substring(line.indexOf('{') + 1, line.indexOf('}'));
++                String[] parts = inner.split(":");
++                if (parts.length >= 2) {
++                    String id = parts[0].trim();
++                    String name = parts[1].trim();
++                    if ("0".equals(id)) continue; // skip owner
++                    result.add("user " + id + ": " + name);
++                }
++            }
++        } catch (Exception e) {
++            Log.d(TAG, "Unable to list users via root", e);
++        }
++        return result;
++    }
++
++    /**
++     * Runs {@code pm install-existing --user &lt;userId&gt; &lt;packageName&gt;} as root.
++     *
++     * @return true on success
++     */
++    public boolean installExistingToUser(String userId, String packageName) {
++        try {
++            return executeRootShell("pm install-existing --user " + userId + " " + packageName);
++        } catch (Exception e) {
++            Log.d(TAG, "installExistingToUser failed", e);
++            return false;
++        }
++    }
++
++    // =========================================================================
++    // Shell helpers
++    // =========================================================================
++
+     private boolean executeRootShell(String command) {
+         Process p = null;
+         try {
+             p = Runtime.getRuntime().exec("su");
+-            //put command
+             if (command != null && !command.trim().isEmpty()) {
+                 p.getOutputStream().write((command + "\n").getBytes(StandardCharsets.UTF_8));
+             }
+-            //exit from su command
+             p.getOutputStream().write("exit\n".getBytes(StandardCharsets.UTF_8));
+             p.getOutputStream().flush();
+             p.getOutputStream().close();
+@@ -69,11 +126,34 @@
+         } catch (Exception e) {
+             Log.d(TAG, "Unable to execute root shell", e);
+         } finally {
+-            if (p != null) {
+-                p.destroy();
+-            }
++            if (p != null) p.destroy();
+         }
+         return false;
+     }
+ 
++    /**
++     * Executes a root shell command and returns its stdout lines.
++     */
++    private List<String> executeRootShellWithOutput(String command) throws Exception {
++        List<String> lines = new ArrayList<>();
++        Process p = null;
++        try {
++            p = Runtime.getRuntime().exec("su");
++            p.getOutputStream().write((command + "\n").getBytes(StandardCharsets.UTF_8));
++            p.getOutputStream().write("exit\n".getBytes(StandardCharsets.UTF_8));
++            p.getOutputStream().flush();
++            p.getOutputStream().close();
++
++            BufferedReader reader = new BufferedReader(
++                    new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
++            String line;
++            while ((line = reader.readLine()) != null) {
++                lines.add(line);
++            }
++            p.waitFor();
++        } finally {
++            if (p != null) p.destroy();
++        }
++        return lines;
++    }
+ }

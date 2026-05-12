@@ -1,0 +1,40 @@
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -22,6 +22,20 @@
+     <!-- To set timers -->
+     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+ 
++    <!-- =====================================================================
++         NEW: permissions required by the KISS-mod features
++         ===================================================================== -->
++    <!-- Required to open the Usage Access settings screen for an app -->
++    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
++        tools:ignore="ProtectedPermissions" />
++    <!-- Required so the Advanced Permissions menu can navigate to the
++         "Install unknown apps" settings page on Android 8+ -->
++    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
++    <!-- Allows the Share APK feature to read APK files from /data/app -->
++    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
++        android:maxSdkVersion="32" />
++    <!-- ===================================================================== -->
++
+     <uses-feature
+         android:name="android.hardware.telephony"
+         android:required="false" />
+@@ -89,6 +103,16 @@
+                 android:name="com.android.systemui.action_assist_icon"
+                 android:resource="@mipmap/ic_launcher" />
+         </activity>
++
++        <!-- NEW: Full-screen App Drawer with Personal/Work tabs -->
++        <activity
++            android:name=".ui.AppDrawerActivity"
++            android:exported="false"
++            android:excludeFromRecents="true"
++            android:label="@string/app_drawer_title"
++            android:theme="@style/AppTheme"
++            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
++
+         <activity
+             android:name=".DummyActivity"
+             android:exported="true"

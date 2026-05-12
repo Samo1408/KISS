@@ -1,0 +1,38 @@
+--- a/app/src/main/res/values/strings.xml
++++ b/app/src/main/res/values/strings.xml
+@@ -155,6 +155,35 @@
+     <string name="menu_shortcut_pin">Pin shortcut</string>
+     <string name="toast_hibernate_completed">%s hibernated, relaunch to awake.</string>
+     <string name="toast_hibernate_error">%s not hibernated.</string>
++    <!-- App Drawer (mod) -->
++    <string name="app_drawer_title">App Drawer</string>
++    <string name="app_drawer_tab_personal">Personal</string>
++    <string name="app_drawer_tab_work">Work</string>
++    <string name="app_drawer_sort_name">Sort A–Z</string>
++    <string name="app_drawer_sort_install">Sort by install date</string>
++    <string name="app_drawer_scroll_horizontal">Horizontal scroll</string>
++    <string name="app_drawer_scroll_vertical">Vertical scroll</string>
++    <string name="app_drawer_new_folder">New folder…</string>
++    <string name="app_drawer_folder_name_hint">Folder name</string>
++    <!-- Long-press menu additions (mod) -->
++    <string name="menu_app_advanced_perms">Advanced Permissions…</string>
++    <string name="menu_app_perm_usage_stats">Usage Access</string>
++    <string name="menu_app_perm_all_files">All Files Access</string>
++    <string name="menu_app_perm_unknown_sources">Install Unknown Apps</string>
++    <string name="menu_app_share_apk">Share App (APK)</string>
++    <string name="menu_app_install_to_user">Install to Another User…</string>
++    <string name="menu_app_show_data_dir">Show Data Dir</string>
++    <string name="menu_app_show_app_dir">Show App Dir</string>
++    <!-- Toasts (mod) -->
++    <string name="toast_share_apk_error">Could not share APK.</string>
++    <string name="toast_no_users_found">No secondary users found.</string>
++    <string name="toast_install_to_user_ok">Installed to %s.</string>
++    <string name="toast_install_to_user_error">Installation to %s failed.</string>
++    <string name="toast_no_root_explorer">No supported root explorer found.\nInstall MiXplorer or MT Manager.</string>
++    <!-- App drawer settings (mod) -->
++    <string name="pref_app_drawer_scroll_title">App Drawer scroll direction</string>
++    <string name="pref_app_drawer_scroll_vertical">Vertical (default)</string>
++    <string name="pref_app_drawer_scroll_horizontal">Horizontal</string>
+     <string name="menu_contact_copy_phone">Copy phone number</string>
+     <string name="theme_name">Theme</string>
+     <string name="menu_phone_create">Create contact…</string>

@@ -1,0 +1,25 @@
+--- a/app/src/main/res/xml/preferences.xml
++++ b/app/src/main/res/xml/preferences.xml
+@@ -460,6 +460,22 @@
+                 app:title="@string/wp_animate_sides" />
+         </PreferenceScreen>
+     </PreferenceScreen>
++    <!-- =====================================================================
++         NEW: App Drawer settings (mod)
++         ===================================================================== -->
++    <PreferenceScreen
++        app:key="app-drawer-holder"
++        app:title="@string/app_drawer_title">
++        <ListPreference
++            app:defaultValue="vertical"
++            app:entries="@array/appDrawerScrollEntries"
++            app:entryValues="@array/appDrawerScrollValues"
++            app:key="app-drawer-scroll-direction"
++            app:title="@string/pref_app_drawer_scroll_title"
++            app:useSimpleSummaryProvider="true" />
++    </PreferenceScreen>
++    <!-- ===================================================================== -->
++
+     <PreferenceScreen
+         app:key="providers"
+         app:summary="@string/providers_summary"
